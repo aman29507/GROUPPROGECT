@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Together Culture</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <!-- Load Static Files -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'landing' %}">Together Culture</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Signup Form Section -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header text-center bg-dark text-white">
+                        <h3>Sign Up</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <!-- Render Form Fields with Bootstrap Styling -->
+                            {% for field in form %}
+                                <div class="mb-3">
+                                    <label class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger small">
+                                            {{ field.errors|striptags }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                            <!-- Membership Type Selection -->
+                            <div class="mb-3">
+                                <label for="membership_type" class="form-label">Membership Type</label>
+                                <select class="form-select" name="membership_type" required>
+                                    <option value="" disabled selected>Select Membership Type</option>
+                                    <option value="community">Community Member</option>
+                                    <option value="key_access">Key Access Member</option>
+                                    <option value="creative_workspace">Creative Workspace Member</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                        </form>
+                        <p class="mt-3 text-center">
+                            Already have an account? <a href="{% url 'login' %}">Login here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 bg-dark text-light mt-5">
+        <p>&copy; 2025 Together Culture. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
