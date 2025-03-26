@@ -4,59 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Together Culture</title>
+    
+    <!-- Load Static Files -->
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <style>
+        /* Background Styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: black;
+            background-image: url("{% static 'images/gold-flecks.jpeg' %}"); /* Ensure this image exists */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            color: white;
         }
+
+        /* Signup Form Styling */
         .login-container {
-            background: white;
+            background: #0a192f; /* Dark blue */
+            border: 2px solid #f5d76e; /* Light gold border */
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             width: 350px;
             text-align: center;
         }
+
         .login-container h2 {
             margin-bottom: 1rem;
-            color: #333;
+            color: #f5d76e; /* Light gold text */
         }
+
         .form-group {
             margin-bottom: 1rem;
             text-align: left;
         }
+
         .form-group label {
             display: block;
             font-weight: bold;
+            color: #f5d76e; /* Light gold label color */
         }
+
         .form-group input {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
-            border: 1px solid #ccc;
+            border: 1px solid #f5d76e; /* Light gold border */
             border-radius: 5px;
+            background: rgba(255, 215, 0, 0.1); /* Light gold tint */
+            color: white; /* White text */
         }
+
         .btn {
             width: 100%;
             padding: 10px;
-            background-color: #28a745; /* Changed to green */
+            background-color: #f5d76e; /* Light gold */
             border: none;
-            color: white;
+            color: #0a192f; /* Dark blue text */
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
         }
+
         .btn:hover {
-            background-color: #218838; /* Darker green on hover */
+            background-color: #d4b056; /* Darker gold on hover */
         }
+
         .register-link {
             margin-top: 1rem;
             display: block;
+            color: #f5d76e; /* Light gold */
         }
     </style>
 </head>
