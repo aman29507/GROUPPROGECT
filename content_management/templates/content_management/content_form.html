@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Content Form{% endblock %}
+
+{% block content %}
+<h2>{% if content %}Edit Content{% else %}Create Content{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+<a href="{% url 'content_management:content_list' %}">Cancel</a>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Content List{% endblock %}
+
+{% block content %}
+<h2>All Content</h2>
+<ul>
+    {% for content in contents %}
+        <li><a href="{% url 'content_management:content_detail' content.id %}">{{ content.title }}</a></li>
+    {% empty %}
+        <p>No content available.</p>
+    {% endfor %}
+</ul>
+<a href="{% url 'content_management:content_create' %}">Add New Content</a>
+{% endblock %}

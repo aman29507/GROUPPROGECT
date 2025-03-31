@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ content.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ content.title }}</h2>
+<p><strong>Author:</strong> {{ content.author }}</p>
+<p>{{ content.body }}</p>
+<a href="{% url 'content_management:content_list' %}">Back to Content</a> |
+<a href="{% url 'content_management:content_edit' content.id %}">Edit</a> |
+<a href="{% url 'content_management:content_delete' content.id %}">Delete</a>
+{% endblock %}
