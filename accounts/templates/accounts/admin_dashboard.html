@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard - Pending Membership Requests</h2>
+<table border="1">
+    <tr>
+        <th>Username</th>
+        <th>Request Date</th>
+        <th>Action</th>
+    </tr>
+    {% for request in pending_requests %}
+    <tr>
+        <td>{{ request.user.username }}</td>
+        <td>{{ request.request_date }}</td>
+        <td>
+            <a href="{% url 'approve_request' request.id %}">Approve</a> |
+            <a href="{% url 'reject_request' request.id %}">Reject</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No pending requests</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

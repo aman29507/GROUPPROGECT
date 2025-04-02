@@ -1,0 +1,197 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+
+<div class="container-fluid">
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center py-3 border-bottom">
+        <h1 class="text-primary">TogetherCulture</h1>
+        <nav>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users' %}">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'membership' %}">Membership</a>
+                </li>
+                <li class="nav-item">
+                    {% if user.is_authenticated %}
+                    <a class="nav-link btn btn-danger text-white" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                    <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'digitalcontent' %}">Digital Content</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Body -->
+    <main class="my-5">
+        <!-- Interests Input Section -->
+        {% if user.is_authenticated %}
+        <!-- <div class="row mb-5">
+            <div class="col-12">
+                <form id="interests-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="interests" class="form-label">Your Interests</label>
+                        <input type="text" class="form-control" id="interests" name="interests" placeholder="Enter your interests (comma-separated)">
+                    </div>
+                </form>
+            </div>
+        </div> -->
+
+        <div class="row mb-5">
+            <div class="col-12">
+                <form method="POST" action="{% url 'membership_select' %}" id="interests-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="interests" class="form-label">Your Interests</label>
+                        <input type="text" class="form-control" id="interests" name="interests" placeholder="Enter your interests (comma-separated)" value="{{ interests|join:', ' }}">
+                    </div>
+                    <input type="hidden" id="selected-membership-type" name="membership_type" 
+    {% if membership %}value="{{ membership.membership_type }}"{% endif %}>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Membership Blocks Section -->
+        <div class="row text-center">
+            <!-- Membership Block 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Community Membership</h5>
+                        <p class="card-text">Access to basic features and community forums.</p>
+                        <p class="card-text">Access to Email support.</p>
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-success select-btn" type="button" onclick="setMembershipType('community', this)" {% if membership and membership.membership_type %}disabled{% endif %}>
+                            {% if membership and membership.membership_type == 'community' %}Selected{% else %}Select{% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Membership Block 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Key Access Membership</h5>
+                        <p class="card-text">Access to all premium contents.</p>
+                        <p class="card-text">Includes advanced features of priority emails and phone support.</p>
+                        <p class="card-text">Access to exclusive webinars and events.</p>
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-success select-btn" type="button" onclick="setMembershipType('key_access', this)" {% if membership and membership.membership_type %}disabled{% endif %}>
+                            {% if membership and membership.membership_type == 'key_access' %}Selected{% else %}Select{% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Membership Block 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Create Workspace Membership</h5>
+                        <p class="card-text">All benefits from community and key access membership.</p>
+                        <p class="card-text">Includes advanced features of personalized account management.</p>
+                        <p class="card-text">Access to free and exclusive events.</p>
+                        <p class="card-text">Access to create workspace customer support (24/7).</p>
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-success select-btn" type="button" onclick="setMembershipType('creative_workspace', this)" {% if membership and membership.membership_type %}disabled{% endif %}>
+                            {% if membership and membership.membership_type == 'creative_workspace' %}Selected{% else %}Select{% endif %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 border-top">
+        <p>Contact us: info@togetherculture.com | Phone: +1-234-567-890</p>
+    </footer>
+</div>
+
+<!-- JavaScript for Confirmation and Button Disable -->
+<script>
+const interests = []; // Array to store interests
+function setInterests(hiddenInputId, button) {
+        const interestsInput = document.getElementById('interests');
+        const hiddenInput = document.getElementById(hiddenInputId);
+        hiddenInput.value = interestsInput.value; // Set the interests value in the hidden input
+
+        // Disable the button after selection
+        button.disabled = true;
+        button.textContent = "Selected";
+    }
+function addInterest(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const input = document.getElementById('user-interests');
+    const interest = input.value.trim();
+
+    if (interest === '') {
+        alert('Please enter a valid interest.');
+        return false;
+    }
+
+    if (interests.length >= 5) {
+        alert('You can only add up to 5 interests.');
+        return false;
+    }
+
+    interests.push(interest); // Add interest to the array
+    updateInterestsList();
+    input.value = ''; // Clear the input field
+    return false;
+}
+
+function updateInterestsList() {
+    const list = document.getElementById('interests-list');
+    list.innerHTML = ''; // Clear the list
+
+    interests.forEach((interest, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center me-2 mb-2'; // Added spacing classes
+        listItem.textContent = interest;
+
+        // Add a remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'btn btn-danger btn-sm ms-2';
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => {
+            interests.splice(index, 1); // Remove the interest
+            updateInterestsList();
+        };
+
+        listItem.appendChild(removeButton);
+        list.appendChild(listItem);
+    });
+}
+function setMembershipType(membershipType, button) {
+    const membershipInput = document.getElementById('selected-membership-type');
+        membershipInput.value = membershipType; // Set the selected membership type in the hidden input
+
+        // Disable all "Select" buttons
+        const buttons = document.querySelectorAll('.select-btn');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.textContent = "Selected";
+        });
+
+        // Enable the clicked button and mark it as selected
+        button.disabled = false;
+        button.textContent = "Selected";
+    }
+</script>
