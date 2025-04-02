@@ -41,6 +41,9 @@
                     </li>
                     <li class="nav-item">
                         {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'membership' %}">Membership</a>
+                        </li>
                         <a class="nav-link btn btn-danger text-white" href="{% url 'logout' %}">Logout</a>
                         {% else %}
                         <a class="btn btn-primary" href="{% url 'login' %}">Login</a>

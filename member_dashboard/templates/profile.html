@@ -30,17 +30,29 @@
                         <!-- Email Edit Form -->
                         <div class="input-group">
                             <input type="email" id="emailInput" class="form-control" value="{{ user.email }}" required>
-                            <button class="btn btn-primary" onclick="updateEmail()">Update</button>
+                            <button class="btn btn-primary" id="emailUpdateButton" onclick="updateEmail()">Update</button>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>First Name</td>
-                    <td>{{ user.first_name }}</td>
+                    <td>
+                        <!-- First Name Edit Form -->
+                        <div class="input-group">
+                            <input type="text" id="firstNameInput" class="form-control" value="{{ user.first_name }}" required>
+                            <button class="btn btn-primary" id="firstNameUpdateButton" onclick="updateName()">Update</button>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>Last Name</td>
-                    <td>{{ user.last_name }}</td>
+                    <td>
+                        <!-- Last Name Edit Form -->
+                        <div class="input-group">
+                            <input type="text" id="lastNameInput" class="form-control" value="{{ user.last_name }}" required>
+                            <button class="btn btn-primary" id="lastNameUpdateButton" onclick="updateName()">Update</button>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>Date Joined</td>
@@ -48,9 +60,13 @@
                 </tr>
                 <tr>
                     <td>Membership Status</td>
-                    <td>{{ user.membership_type }}</td>
+                    <td>
+                        <!-- Membership Status (Read-only) -->
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="{{ user.membership_type }}" readonly>
+                        </div>
+                    </td>
                 </tr>
-                                
             </tbody>
         </table>
 
@@ -70,50 +86,53 @@
     <script>
         // JavaScript function to handle email update
         function updateEmail() {
-        const emailInput = document.getElementById('emailInput').value;
-
-        // Send the updated email to the server using a POST request
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-CSRFToken': '{{ csrf_token }}' // Include CSRF token for security
-            },
-            body: `email=${encodeURIComponent(emailInput)}`
-        })
-        .then(response => {
-            // Check if the response is JSON and parse it
-            if (!response.ok) {
-                return response.json().then(data => {
-                    throw new Error(data.message || 'Failed to update email.');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message) {
-                alert(data.message); // Display the message from the server
-            }
-            window.location.reload(); // Reload the page to reflect changes
-        })
-        .catch(error => {
-            console.error('Error:', error.message);
-            alert(error.message); // Display the error message
-        });
-    }
-
-        // JavaScript function to check if the email has changed
-        function checkEmailChange() {
             const emailInput = document.getElementById('emailInput').value;
-            const currentEmail = "{{ user.email }}"; // Get the current email from the server
-            const updateButton = document.getElementById('updateButton');
 
-            // Enable the button only if the email has changed
-            if (emailInput !== currentEmail) {
-                updateButton.disabled = false;
-            } else {
-                updateButton.disabled = true;
-            }
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `email=${encodeURIComponent(emailInput)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                }
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                alert(error.message);
+            });
+        }
+
+        // JavaScript function to handle name update (First Name and Last Name)
+        function updateName() {
+            const firstNameInput = document.getElementById('firstNameInput').value;
+            const lastNameInput = document.getElementById('lastNameInput').value;
+
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `first_name=${encodeURIComponent(firstNameInput)}&last_name=${encodeURIComponent(lastNameInput)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                }
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error.message);
+                alert(error.message);
+            });
         }
     </script>
 </body>
