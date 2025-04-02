@@ -20,11 +20,7 @@ from landing.views import ( home_screen_view, )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_screen_view, name='home'),
+    path('', home_screen_view),
     path('accounts/', include('accounts.urls')),
     path('landing/', include('landing.urls')),
-    path('membership/', include('membership.urls')),
-    path('users/',include('users.urls')),
-    path('digitalcontent/', include('digitalcontent.urls')),
-    path('member_dashboard/', include('member_dashboard.urls')),
 ]

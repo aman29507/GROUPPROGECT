@@ -12,15 +12,84 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
+    <style>
+        /* Background Styling */
+        body {
+            background-color: black;
+            background-image: url("{% static 'images/gold-flecks.jpeg' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: #0a192f !important; /* Dark blue */
+            border-bottom: 2px solid #f5d76e; /* Light gold bottom border */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f5d76e !important; /* Light gold text */
+        }
+
+        .nav-link:hover {
+            color: #d4b056 !important; /* Slightly darker gold */
+        }
+
+        /* Signup Form Styling */
+        .card {
+            background: #0a192f; /* Dark blue */
+            border: 2px solid #f5d76e; /* Light gold border */
+            color: white;
+        }
+
+        .card-header {
+            background: #1a1a2e !important; /* Slightly darker theme */
+            color: #f5d76e !important; /* Light gold text */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Input field styles */
+        .form-control {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #f5d76e; /* Light gold border */
+            color: white;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 215, 0, 0.7);
+        }
+
+        /* Button Styling */
+        .btn-signup {
+            background-color: #f5d76e;
+            border-color: #f5d76e;
+            color: #0a192f; /* Dark blue text */
+            font-weight: bold;
+        }
+
+        .btn-signup:hover {
+            background-color: #d4b056;
+            border-color: #d4b056;
+        }
+
+        /* Footer Styling */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid gold;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{% url 'landing' %}">Together Culture</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon" style="filter: invert(88%) sepia(20%) saturate(741%) hue-rotate(359deg) brightness(105%) contrast(103%);"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
@@ -37,41 +106,45 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">
-                    <div class="card-header text-center bg-dark text-white">
+                    <div class="card-header">
                         <h3>Sign Up</h3>
                     </div>
                     <div class="card-body">
-                        <form method="post">
+                        <form method="post" action="{% url 'signup' %}"> <!-- Ensure action is correct -->
                             {% csrf_token %}
 
-                            <!-- Render Form Fields with Bootstrap Styling -->
-                            {% for field in form %}
-                                <div class="mb-3">
-                                    <label class="form-label">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        <div class="text-danger small">
-                                            {{ field.errors|striptags }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-
-                            <!-- Membership Type Selection -->
+                            <!-- Email Address Field -->
                             <div class="mb-3">
-                                <label for="membership_type" class="form-label">Membership Type</label>
-                                <select class="form-select" name="membership_type" required>
-                                    <option value="" disabled selected>Select Membership Type</option>
-                                    <option value="community">Community Member</option>
-                                    <option value="key_access">Key Access Member</option>
-                                    <option value="creative_workspace">Creative Workspace Member</option>
-                                </select>
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" name="email" required>
                             </div>
 
-                            <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                            <!-- Phone Number Field -->
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" name="phone_number" pattern="[0-9]{10}" required>
+                                <small class="text-muted">Enter a 10-digit phone number</small>
+                            </div>
+
+                            <!-- Render Other Form Fields (excluding email) -->
+                            {% for field in form %}
+                                {% if field.name != 'email' %}
+                                    <div class="mb-3">
+                                        <label class="form-label">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.errors %}
+                                            <div class="text-danger small">
+                                                {{ field.errors|striptags }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="submit" class="btn btn-signup w-100">Sign Up</button>
                         </form>
                         <p class="mt-3 text-center">
-                            Already have an account? <a href="{% url 'login' %}">Login here</a>
+                            Already have an account? <a href="{% url 'login' %}" class="text-warning">Login here</a>
                         </p>
                     </div>
                 </div>
@@ -80,7 +153,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="text-center py-3 bg-dark text-light mt-5">
+    <footer class="text-center py-3 mt-5">
         <p>&copy; 2025 Together Culture. All rights reserved.</p>
     </footer>
 

@@ -3,21 +3,21 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser
 
 class SignupForm(UserCreationForm):
-    membership_type = forms.ChoiceField(
-        choices=CustomUser.MEMBERSHIP_CHOICES,
-       widget=forms.Select(attrs={'class': 'form-select'}),
-        label='Membership Type'
-    )
+    """Custom signup form without membership_type."""
 
     class Meta:
-        model =CustomUser  # Specify your custom user model
-        fields = ['username', 'email', 'password1', 'password2', 'membership_type']  # Fields to include in the form
+        model = CustomUser
+        fields = ['username', 'email', 'password1', 'password2']  # ❌ Removed 'membership_type'
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
-        # Optionally, customize field attributes here if needed
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
-
+        
+        field_classes = {
+            'username': 'Username',
+            'email': 'Email',
+            'password1': 'Password',
+            'password2': 'Confirm Password'
+        }
+        
+        for field, placeholder in field_classes.items():
+            self.fields[field].widget.attrs.update({'class': 'form-control', 'placeholder': placeholder})
