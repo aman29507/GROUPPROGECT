@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from .forms import SignupForm, AuthenticationForm  # Use the correct forms
 from .models import CustomUser  # Ensure CustomUser is imported
 from django.contrib.auth.decorators import login_required
+from membership.models import Membership  # Import the Membership model
 
 def signup_view(request):
     if request.method == "POST":
@@ -21,7 +22,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('dashboard')  # Redirect to the dashboard
+            return redirect('accounts/dashboard')  # Redirect to the dashboard
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/login.html', {'form': form})
@@ -32,6 +33,13 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    return render(request, 'accounts/dashboard.html')  # Render the dashboard template
+    return render(request, 'accounts/membership.html')  # Render the dashboard template
 
+@login_required
+def membership_view(request):
+    user = request.user
+    membership = Membership.objects.filter(user=user).first()
+    interests = membership.interests if membership else []
+
+    
 
