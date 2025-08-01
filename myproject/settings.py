@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'events',
-    'messaging.apps.MessagingConfig',
+    'messaging', ,
     'content_management',
     'accounts',
     

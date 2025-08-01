@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<h2>Welcome to the Events Section</h2>
+<p>Discover and manage upcoming events.</p>
+
+<ul>
+    <li><a href="{% url 'events:event_list' %}">View All Events</a></li>
+    <li><a href="{% url 'events:event_create' %}">Create New Event</a></li>
+</ul>
+
+{% endblock %}

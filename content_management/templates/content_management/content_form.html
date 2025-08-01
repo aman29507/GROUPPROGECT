@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Content Form{% endblock %}
-
 {% block content %}
-<h2>{% if content %}Edit Content{% else %}Create Content{% endif %}</h2>
-<form method="post">
+  <h1>{% if form.instance.pk %}Edit Content{% else %}Create Content{% endif %}</h1>
+
+  <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-<a href="{% url 'content_management:content_list' %}">Cancel</a>
+    {{ form.as_p }}  <!-- This renders the form fields -->
+    <button type="submit">{% if form.instance.pk %}Update{% else %}Create{% endif %}</button>
+  </form>
+
+  <a href="{% url 'content_management:content_list' %}">Back to content list</a>
 {% endblock %}
+

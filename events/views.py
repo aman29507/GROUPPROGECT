@@ -1,26 +1,18 @@
-from .forms import EventForm
-from django.shortcuts import render, get_object_or_404 , redirect
+from django.shortcuts import render, redirect
 from .models import Event
+from django.contrib.auth.decorators import login_required
 
+@login_required
+def create_event(request):
+    if request.method == 'POST':
+        title = request.POST['title']
+        description = request.POST['description']
+        date = request.POST['date']
+        Event.objects.create(title=title, description=description, date=date, creator=request.user)
+        return redirect('event_list')
+    return render(request, 'events/create_event.html')
 
-def index(request):
-    return render(request, 'events/index.html')
-
+@login_required
 def event_list(request):
     events = Event.objects.all()
     return render(request, 'events/event_list.html', {'events': events})
-
-def event_detail(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    return render(request, 'events/event_detail.html', {'event': event})
-
-def event_create(request):
-    if request.method == "POST":
-        form = EventForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('event_list')  # Redirect to event list after successful creation
-    else:
-        form = EventForm()
-
-    return render(request, 'events/event_form.html', {'form': form})

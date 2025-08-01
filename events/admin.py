@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Event
 
-admin.site.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date', 'location', 'organizer')
+    search_fields = ('title', 'location', 'organizer__username')
+    list_filter = ('date',)
+    ordering = ('-date',)
 
-# Register your models here.
+admin.site.register(Event, EventAdmin)

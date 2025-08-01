@@ -3,8 +3,12 @@
 {% block title %}Content Management{% endblock %}
 
 {% block content %}
-<h1>Welcome to the Content Management Section</h1>
-<p><a href="{% url 'content_list' %}">View All Content</a></p>
-<p><a href="{% url 'create_content' %}">Create New Content</a></p>
-{% endblock %}
+<h2>Welcome to the Content Management System</h2>
+<p>Manage your content efficiently.</p>
 
+<ul>
+    <li><a href="{% url 'content_management:content_list' %}">View All Content</a></li>
+    <li><a href="{% url 'content_management:content_create' %}">Create New Content</a></li>
+</ul>
+
+{% endblock %}

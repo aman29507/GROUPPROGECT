@@ -1,34 +1,22 @@
-from django.shortcuts import render ,get_object_or_404, redirect
-
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Message
-from .forms import MessageForm
+from django.contrib.auth import get_user_model
 
-def index(request):
-    return render(request, 'messaging/index.html')
+User = get_user_model()
 
-def inbox(request):
-    messages = Message.objects.filter(receiver=request.user)
-    print(messages)
-    return render(request, 'messaging/inbox.html', {'messages': messages})
-
-def message_list(request):
-    messages = Message.objects.all()  # Or filter messages based on the user
-    return render(request, 'messaging/message_list.html', {'messages': messages})
-
-def message_detail(request, pk):
-    message = get_object_or_404(Message, pk=pk)
-    return render(request, 'messaging/message_detail.html', {'message': message})
-
+@login_required
 def send_message(request):
-    if request.method == "POST":
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('inbox')  # Redirect to the inbox after sending
-    else:
-        form = MessageForm()
-    
-    return render(request, 'messaging/send_message.html', {'form': form})
+    if request.method == 'POST':
+        receiver_id = request.POST['receiver']
+        body = request.POST['body']
+        receiver = User.objects.get(id=receiver_id)
+        Message.objects.create(sender=request.user, receiver=receiver, body=body)
+        return redirect('inbox')
+    users = User.objects.exclude(id=request.user.id)
+    return render(request, 'messaging/send_message.html', {'users': users})
 
-
-# Create your views here.
+@login_required
+def inbox(request):
+    messages = Message.objects.filter(receiver=request.user).order_by('-timestamp')
+    return render(request, 'messaging/inbox.html', {'messages': messages})

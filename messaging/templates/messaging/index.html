@@ -3,7 +3,12 @@
 {% block title %}Messaging{% endblock %}
 
 {% block content %}
-<h1>Welcome to the Messaging Section</h1>
-<p><a href="{% url 'message_list' %}">View Inbox</a></p>
-<p><a href="{% url 'send_message' %}">Send a Message</a></p>
+<h2>Welcome to the Messaging System</h2>
+<p>Stay connected with your messages.</p>
+
+<ul>
+    <li><a href="{% url 'messaging:inbox' %}">Go to Inbox</a></li>
+    <li><a href="{% url 'messaging:send_message' %}">Send a New Message</a></li>
+</ul>
+
 {% endblock %}
